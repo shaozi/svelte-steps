@@ -1,5 +1,5 @@
 {
-  "name": "SvelteComponent",
+  "name": "svelte-steps",
   "svelte": "src/index.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
@@ -11,7 +11,7 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "rollup": "^2.0.0",
     "rollup-plugin-svelte": "^6.0.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.40.2"
   },
   "keywords": [
     "svelte"
@@ -19,5 +19,17 @@
   "files": [
     "src",
     "dist"
-  ]
+  ],
+  "description": "A Svelte steps component",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaozi/svelte-steps.git"
+  },
+  "author": "Jingshao Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shaozi/svelte-steps/issues"
+  },
+  "homepage": "https://github.com/shaozi/svelte-steps#readme"
 }
