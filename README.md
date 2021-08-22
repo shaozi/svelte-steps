@@ -1,35 +1,123 @@
-*Psst — looking for an app template? Go here --> [sveltejs/template](https://github.com/sveltejs/template)*
+# Svelte steps component that is compatible to bootstrap
 
----
+A customizable step component written in Svelte.
 
-# component-template
+![demo](static/demo.png)
 
-A base for building shareable Svelte components. Clone it with [degit](https://github.com/Rich-Harris/degit):
+## Installation
 
-```bash
-npx degit sveltejs/component-template my-new-component
-cd my-new-component
-npm install # or yarn
+```sh
+npm install --saveDev svelte-steps
 ```
 
-Your component's source code lives in `src/Component.svelte`.
+## Example Usages
 
-You can create a package that exports multiple components by adding them to the `src` directory and editing `src/index.js` to reexport them as named exports.
+### Basic Usage
 
-TODO
+```javascript
+<script>
+	import Steps from '$lib/Steps.svelte';
+	let steps = [
+		{ text: 'step one' }, 
+		{ text: 'step two' }, 
+		{ text: 'the last step' }];
+</script>
 
-* [ ] some firm opinions about the best way to test components
-* [ ] update `degit` so that it automates some of the setup work
+<Steps {steps} />
+```
 
+### With Icons
 
-## Setting up
+```javascript
+let steps = [
+	{ text: 'step one', icon: IconMoney },
+	{ text: 'step two', icon: IconPaperClip },
+	{ text: 'the last step', icon: IconPerson }
+]
+```
 
-* Run `npm init` (or `yarn init`)
-* Replace this README with your own
+### Square Steps
 
+```javascript
+<Steps {steps} borderRadius="0"/>
+```
 
-## Consuming components
+### Custom Color
 
-Your package.json has a `"svelte"` field pointing to `src/index.js`, which allows Svelte apps to import the source code directly, if they are using a bundler plugin like [rollup-plugin-svelte](https://github.com/sveltejs/rollup-plugin-svelte) or [svelte-loader](https://github.com/sveltejs/svelte-loader) (where [`resolve.mainFields`](https://webpack.js.org/configuration/resolve/#resolve-mainfields) in your webpack config includes `"svelte"`). **This is recommended.**
+```javascript
+<Steps {steps} primary="#ff0000" secondary="#ffaaaa"/>
+```
 
-For everyone else, `npm run build` will bundle your component's source code into a plain JavaScript module (`dist/index.mjs`) and a UMD script (`dist/index.js`). This will happen automatically when you publish your component to npm, courtesy of the `prepublishOnly` hook in package.json.
+### Custom Size
+
+```javascript
+<Steps {steps} size="2em" lineHeight="2px"/>
+```
+
+### No Text
+
+```javascript
+let steps = [
+	{ icon: IconMoney },
+	{ icon: IconPaperClip },
+	{ icon: IconPerson }
+]
+```
+
+### Bar
+
+```javascript
+<Steps {steps} size="2rem" lineHeight="2rem"
+```
+
+### Events
+
+```javascript
+<Steps
+    {steps}
+    {current}
+    on:click={(e) => {
+        last = e.detail.last;
+        current = e.detail.current;
+    }}
+/>
+```
+
+## Use with Bootstrap
+
+It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dark` css variables if they are defined. These css vars are defined in bootstrap css:
+
+```html
+<!-- Include Bootstrap css in app.html <head></head> -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+/>
+```
+
+## Props
+
+- `steps`:
+  - Array of object. Length has to be more than 1
+  - Required
+  - Each item is a step object that can have:
+    - `text`: The text displayed below each steps.
+    - `icon`: A svelte component displayed inside each steps.
+    - `iconProps`: An object that will be passed as props to the `icon` component.
+- `current`: current step index. Number. Default `0`
+- `size`: size of the step buttons. String. Default `"3rem"`
+- `lineHeight`: height of the connecting lines between the step buttons. String. Default `"0.3rem"`
+- `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
+- `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
+- `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
+- `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
+- `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
+- `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
+
+## Events
+
+- `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
+    
+		
