@@ -16,7 +16,7 @@ npm install --saveDev svelte-steps
 
 ```javascript
 <script>
-	import Steps from '$lib/Steps.svelte';
+	import { Steps } from 'svelte-steps';
 	let steps = [
 		{ text: 'step one' }, 
 		{ text: 'step two' }, 
