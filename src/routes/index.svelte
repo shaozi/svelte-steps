@@ -8,7 +8,7 @@
     {
       title: 'Basic Usage',
       code: `<script>
-	import Steps from 'svelte-steps';
+	import { Steps } from 'svelte-steps';
 	let steps = [
 		{ text: 'step one' }, 
 		{ text: 'step two' }, 
