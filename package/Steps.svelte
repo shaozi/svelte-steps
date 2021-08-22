@@ -29,166 +29,177 @@
 	- `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
 -->
 <script>
-	// A bootstrap step component
-	import { createEventDispatcher } from 'svelte';
-	import Check from '$lib/check.svelte';
+  // A bootstrap step component
+  import { createEventDispatcher } from 'svelte'
+  import Check from './Check.svelte'
 
-	export let steps;
-	export let current = 0;
-	export let size = '3rem';
-	export let lineHeight = '0.3rem';
-	export let primary = 'var(--bs-primary, #3a86ff)';
-	export let secondary = 'var(--bs-secondary, #bbbbc0)';
-	export let light = 'var(--bs-light, white)';
-	export let dark = 'var(--bs-dark, black)';
-	export let borderRadius = '50%';
-	export let fontFamily = '';
+  export let steps
+  export let current = 0
+  export let size = '3rem'
+  export let lineHeight = '0.3rem'
+  export let primary = 'var(--bs-primary, #3a86ff)'
+  export let secondary = 'var(--bs-secondary, #bbbbc0)'
+  export let light = 'var(--bs-light, white)'
+  export let dark = 'var(--bs-dark, black)'
+  export let borderRadius = '50%'
+  export let fontFamily = ''
 
-	if (current > steps.length - 1) {
-		current = steps.length - 1;
-	}
-	if (current < 0) {
-		current = 0;
-	}
-	$: total = steps.length;
-	$: half = 100 / steps.length / 2;
-	const dispatch = createEventDispatcher();
-	let onClick = (i) => {
-		let last = current;
-		current = i;
-		dispatch('click', { current, last });
-	};
+  if (current > steps.length - 1) {
+    current = steps.length - 1
+  }
+  if (current < 0) {
+    current = 0
+  }
+  $: total = steps.length
+  $: half = 100 / steps.length / 2
+  const dispatch = createEventDispatcher()
+  let onClick = (i) => {
+    let last = current
+    current = i
+    dispatch('click', { current, last })
+  }
 </script>
 
 <div
-	class="steps-container"
-	style={`--size: ${size}; 
+  class="steps-container"
+  style={`--size: ${size}; 
 			--primary: ${primary}; 
 			--secondary: ${secondary};
 			--light: ${light};
 			--dark: ${dark};
 			--border-radius: ${borderRadius};
-			--font-family: ${fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"};`}
+			--font-family: ${
+        fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"
+      };`}
 >
-	<div class="block">
-		<div class="background">
-			<div class="d-flex align-items-center" style="width: 100%; height: 100%">
-				<div style="width: {half}%; height: 100%;" />
-				<div class="bg-secondary" style="height: {lineHeight}; width: {100 - half * 2}%;">
-					<div class="bg-primary" style="height: 100%; width: {(current * 100) / (total - 1)}%" />
-				</div>
-				<div style="width: {half}%; height: 100%" />
-			</div>
-		</div>
+  <div class="block">
+    <div class="background">
+      <div class="d-flex align-items-center" style="width: 100%; height: 100%">
+        <div style="width: {half}%; height: 100%;" />
+        <div
+          class="bg-secondary"
+          style="height: {lineHeight}; width: {100 - half * 2}%;"
+        >
+          <div
+            class="bg-primary"
+            style="height: 100%; width: {(current * 100) / (total - 1)}%"
+          />
+        </div>
+        <div style="width: {half}%; height: 100%" />
+      </div>
+    </div>
 
-		<div class="foreground">
-			<div class="d-flex justify-content-space-around">
-				{#each steps as step, i}
-					<div
-						class="step 
+    <div class="foreground">
+      <div class="d-flex justify-content-space-around">
+        {#each steps as step, i}
+          <div
+            class="step 
 						  {i <= current ? `bg-primary text-light` : `bg-secondary text-light`}
 						  "
-						class:shadow={i == current}
-						on:click={() => {
-							onClick(i);
-						}}
-					>
-						{#if step.icon}
-							{#if i < current}
-								<Check />
-							{:else if step.iconProps}
-								<svelte:component this={step.icon} {...step.iconProps} />
-							{:else}
-								<svelte:component this={step.icon} />
-							{/if}
-						{:else if i < current}
-							<Check />
-						{:else}
-							<span class="steps__number">{i + 1}</span>
-						{/if}
-					</div>
-				{/each}
-			</div>
-		</div>
-	</div>
+            class:shadow={i == current}
+            on:click={() => {
+              onClick(i)
+            }}
+          >
+            {#if step.icon}
+              {#if i < current}
+                <Check />
+              {:else if step.iconProps}
+                <svelte:component this={step.icon} {...step.iconProps} />
+              {:else}
+                <svelte:component this={step.icon} />
+              {/if}
+            {:else if i < current}
+              <Check />
+            {:else}
+              <span class="steps__number">{i + 1}</span>
+            {/if}
+          </div>
+        {/each}
+      </div>
+    </div>
+  </div>
 
-	<div class="d-flex align-items-start">
-		{#each steps as step, i}
-			{#if typeof step.text != 'undefined'}
-				<div class="d-flex justify-content-center" style="width: {100 / total}%;">
-					<div class:text-primary={i <= current} class="steps__label">
-						{step.text}
-					</div>
-				</div>
-			{/if}
-		{/each}
-	</div>
+  <div class="d-flex align-items-start">
+    {#each steps as step, i}
+      {#if typeof step.text != 'undefined'}
+        <div
+          class="d-flex justify-content-center"
+          style="width: {100 / total}%;"
+        >
+          <div class:text-primary={i <= current} class="steps__label">
+            {step.text}
+          </div>
+        </div>
+      {/if}
+    {/each}
+  </div>
 </div>
 
 <style>
-	.steps-container {
-		font-family: var(--font-family);
-	}
-	.block {
-		display: flex;
-		flex-flow: row nowrap;
-	}
-	.block .background,
-	.block .foreground {
-		box-sizing: border-box;
-		width: 100%;
-		flex: none;
-	}
+  .steps-container {
+    font-family: var(--font-family);
+  }
+  .block {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  .block .background,
+  .block .foreground {
+    box-sizing: border-box;
+    width: 100%;
+    flex: none;
+  }
 
-	.block .foreground {
-		margin-left: -100%;
-	}
-	.step {
-		border-radius: var(--border-radius);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: var(--size);
-		height: var(--size);
-		font-size: calc(var(--size) * 0.5);
-	}
-	.step:hover {
-		cursor: pointer;
-		filter: brightness(85%);
-	}
+  .block .foreground {
+    margin-left: -100%;
+  }
+  .step {
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size);
+    height: var(--size);
+    font-size: calc(var(--size) * 0.5);
+  }
+  .step:hover {
+    cursor: pointer;
+    filter: brightness(85%);
+  }
 
-	.d-flex {
-		display: flex;
-	}
-	.d-flex.align-items-start {
-		align-items: flex-start;
-	}
-	.d-flex.align-items-center {
-		align-items: center;
-	}
-	.d-flex.justify-content-center {
-		justify-content: center;
-	}
-	.d-flex.justify-content-space-around {
-		justify-content: space-around;
-	}
+  .d-flex {
+    display: flex;
+  }
+  .d-flex.align-items-start {
+    align-items: flex-start;
+  }
+  .d-flex.align-items-center {
+    align-items: center;
+  }
+  .d-flex.justify-content-center {
+    justify-content: center;
+  }
+  .d-flex.justify-content-space-around {
+    justify-content: space-around;
+  }
 
-	.text-primary {
-		color: var(--primary) !important;
-	}
-	.text-light {
-		color: var(--light) !important;
-	}
-	.text-dark {
-		color: var(--dark) !important;
-	}
-	.bg-secondary {
-		background-color: var(--secondary) !important;
-	}
-	.bg-primary {
-		background-color: var(--primary) !important;
-	}
-	.shadow {
-		box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-	}
+  .text-primary {
+    color: var(--primary) !important;
+  }
+  .text-light {
+    color: var(--light) !important;
+  }
+  .text-dark {
+    color: var(--dark) !important;
+  }
+  .bg-secondary {
+    background-color: var(--secondary) !important;
+  }
+  .bg-primary {
+    background-color: var(--primary) !important;
+  }
+  .shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
 </style>

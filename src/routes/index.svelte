@@ -3,13 +3,12 @@
   import Icon from '../demo-lib/icons/Icon.svelte'
   import { HighlightSvelte } from 'svelte-highlight'
   import atomOneDark from 'svelte-highlight/src/styles/atom-one-dark'
-  import { fly } from 'svelte/transition'
 
   let demos = [
     {
       title: 'Basic Usage',
       code: `<script>
-	import Steps from '$lib/Steps.svelte';
+	import Steps from 'svelte-steps';
 	let steps = [
 		{ text: 'step one' }, 
 		{ text: 'step two' }, 
