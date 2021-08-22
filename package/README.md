@@ -1,38 +1,123 @@
-# create-svelte
+# Svelte steps component that is compatible to bootstrap
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+A customizable step component written in Svelte.
 
-## Creating a project
+![demo](static/demo.png)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
+```sh
+npm install --saveDev svelte-steps
 ```
 
-> Note: the `@next` is temporary
+## Example Usages
 
-## Developing
+### Basic Usage
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```javascript
+<script>
+	import Steps from '$lib/Steps.svelte';
+	let steps = [
+		{ text: 'step one' }, 
+		{ text: 'step two' }, 
+		{ text: 'the last step' }];
+</script>
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+<Steps {steps} />
 ```
 
-## Building
+### With Icons
 
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
+```javascript
+let steps = [
+	{ text: 'step one', icon: IconMoney },
+	{ text: 'step two', icon: IconPaperClip },
+	{ text: 'the last step', icon: IconPerson }
+]
 ```
 
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+### Square Steps
+
+```javascript
+<Steps {steps} borderRadius="0"/>
+```
+
+### Custom Color
+
+```javascript
+<Steps {steps} primary="#ff0000" secondary="#ffaaaa"/>
+```
+
+### Custom Size
+
+```javascript
+<Steps {steps} size="2em" lineHeight="2px"/>
+```
+
+### No Text
+
+```javascript
+let steps = [
+	{ icon: IconMoney },
+	{ icon: IconPaperClip },
+	{ icon: IconPerson }
+]
+```
+
+### Bar
+
+```javascript
+<Steps {steps} size="2rem" lineHeight="2rem"
+```
+
+### Events
+
+```javascript
+<Steps
+    {steps}
+    {current}
+    on:click={(e) => {
+        last = e.detail.last;
+        current = e.detail.current;
+    }}
+/>
+```
+
+## Use with Bootstrap
+
+It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dark` css variables if they are defined. These css vars are defined in bootstrap css:
+
+```html
+<!-- Include Bootstrap css in app.html <head></head> -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+/>
+```
+
+## Props
+
+- `steps`:
+  - Array of object. Length has to be more than 1
+  - Required
+  - Each item is a step object that can have:
+    - `text`: The text displayed below each steps.
+    - `icon`: A svelte component displayed inside each steps.
+    - `iconProps`: An object that will be passed as props to the `icon` component.
+- `current`: current step index. Number. Default `0`
+- `size`: size of the step buttons. String. Default `"3rem"`
+- `lineHeight`: height of the connecting lines between the step buttons. String. Default `"0.3rem"`
+- `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
+- `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
+- `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
+- `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
+- `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
+- `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
+
+## Events
+
+- `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
+    
+		
