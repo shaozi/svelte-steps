@@ -12,15 +12,18 @@ npm install --saveDev svelte-steps
 
 ## Example Usages
 
+Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app)
+
 ### Basic Usage
 
 ```javascript
 <script>
-	import { Steps } from 'svelte-steps';
-	let steps = [
-		{ text: 'step one' }, 
-		{ text: 'step two' }, 
-		{ text: 'the last step' }];
+    import { Steps } from 'svelte-steps';
+    let steps = [
+        { text: 'step one' }, 
+        { text: 'step two' }, 
+        { text: 'the last step' }
+    ];
 </script>
 
 <Steps {steps} />
@@ -30,9 +33,9 @@ npm install --saveDev svelte-steps
 
 ```javascript
 let steps = [
-	{ text: 'step one', icon: IconMoney },
-	{ text: 'step two', icon: IconPaperClip },
-	{ text: 'the last step', icon: IconPerson }
+    { text: 'step one', icon: IconMoney },
+    { text: 'step two', icon: IconPaperClip },
+    { text: 'the last step', icon: IconPerson }
 ]
 ```
 
@@ -58,9 +61,9 @@ let steps = [
 
 ```javascript
 let steps = [
-	{ icon: IconMoney },
-	{ icon: IconPaperClip },
-	{ icon: IconPerson }
+    { icon: IconMoney },
+    { icon: IconPaperClip },
+    { icon: IconPerson }
 ]
 ```
 
@@ -120,4 +123,4 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 
 - `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
     
-		
+
