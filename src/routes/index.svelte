@@ -17,7 +17,7 @@
 
 <Steps {steps} />`,
       steps: [
-        { text: 'step one' },
+        { text: 'steppingstone one' },
         { text: 'step two' },
         { text: 'the last step' },
       ],
@@ -137,11 +137,17 @@
   {#each demos as demo}
     <div class="my-4">
       <h3>{demo.title}</h3>
-      <HighlightSvelte
-        code={demo.code}
-        style="padding: 1rem; border-radius: 0.5rem;"
-      />
-      <Steps steps={demo.steps} {current} {...demo.props} />
+      <div class="row">
+        <div class="col-md-6">
+          <HighlightSvelte
+            code={demo.code}
+            style="padding: 1rem; border-radius: 0.5rem;"
+          />
+        </div>
+        <div class="col-md-6">
+          <Steps steps={demo.steps} {current} {...demo.props} />
+        </div>
+      </div>
     </div>
   {/each}
 </div>
