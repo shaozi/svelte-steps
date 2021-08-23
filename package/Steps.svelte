@@ -127,7 +127,10 @@
           class="d-flex justify-content-center"
           style="width: {100 / total}%;"
         >
-          <div class:text-primary={i <= current} class="steps__label">
+          <div
+            class:text-primary={i <= current}
+            class="steps__label text-center"
+          >
             {step.text}
           </div>
         </div>
@@ -202,7 +205,8 @@
   .shadow {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
-  .steps__label {
+  .steps__label,
+  .text-center {
     text-align: center;
   }
 </style>

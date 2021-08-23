@@ -12,7 +12,8 @@
 	let steps = [
 		{ text: 'step one' }, 
 		{ text: 'step two' }, 
-		{ text: 'the last step' }];
+		{ text: 'the last step' }
+  ];
 <\/script>
 
 <Steps {steps} />`,
@@ -99,7 +100,7 @@
     },
     {
       title: 'Bar',
-      code: `<Steps {steps} size="2rem" lineHeight="2rem"`,
+      code: `<Steps {steps} size="2rem" lineHeight="2rem"/>`,
       steps: [
         { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
         {
@@ -133,7 +134,12 @@
     A customizable step component written in Svelte
   </div>
 
-  <h2>Examples</h2>
+  <h2>Install</h2>
+  <HighlightSvelte
+    code={`npm install --save-dev svelte-steps`}
+    style="padding: 1rem; border-radius: 0.5rem;"
+  />
+  <h2>Usage</h2>
   {#each demos as demo}
     <div class="my-4">
       <h3>{demo.title}</h3>
