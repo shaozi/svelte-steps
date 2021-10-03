@@ -31,6 +31,7 @@
 <script>
   // A bootstrap step component
   import { createEventDispatcher } from 'svelte'
+  import { tweened } from 'svelte/motion'
   import Check from './Check.svelte'
 
   export let steps
@@ -50,12 +51,17 @@
   if (current < 0) {
     current = 0
   }
-  $: total = steps.length
+
+  const progress = tweened(current, {
+    duration: 400,
+  })
+
   $: half = 100 / steps.length / 2
   const dispatch = createEventDispatcher()
   let onClick = (i) => {
     let last = current
     current = i
+    progress.set(i)
     dispatch('click', { current, last })
   }
 </script>
@@ -82,7 +88,8 @@
         >
           <div
             class="bg-primary"
-            style="height: 100%; width: {(current * 100) / (total - 1)}%"
+            style="height: 100%; width: {($progress * 100) /
+              (steps.length - 1)}%"
           />
         </div>
         <div style="width: {half}%; height: 100%" />
@@ -125,7 +132,7 @@
       {#if typeof step.text != 'undefined'}
         <div
           class="d-flex justify-content-center"
-          style="width: {100 / total}%;"
+          style="width: {100 / steps.length}%;"
         >
           <div
             class:text-primary={i <= current}
