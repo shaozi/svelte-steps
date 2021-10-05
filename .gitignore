@@ -2,9 +2,6 @@
 node_modules
 /build
 /package
-.svelte-kit/build
-.svelte-kit/output
-.svelte-kit/dev
-.firebase/
-.firebaserc
-.firebase.json
+.svelte-kit/
+.firebase*
+firebase.json
