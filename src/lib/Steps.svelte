@@ -87,7 +87,7 @@
           style="height: {lineHeight}; width: {100 - half * 2}%;"
         >
           <div
-            class="bg-primary"
+            class="progress-bar"
             style="height: 100%; width: {($progress * 100) /
               (steps.length - 1)}%"
           />
@@ -215,5 +215,10 @@
   .steps__label,
   .text-center {
     text-align: center;
+  }
+
+  .progress-bar {
+    background-color: var(--primary);
+    border-right: 1px solid white;
   }
 </style>
