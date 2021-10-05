@@ -5,3 +5,5 @@ node_modules
 .svelte-kit/output
 .svelte-kit/dev
 .firebase/
+.firebaserc
+.firebase.json
