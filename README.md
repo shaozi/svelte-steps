@@ -1,6 +1,6 @@
 # Svelte steps component that is compatible to bootstrap
 
-A customizable step component written in Svelte.
+A customizable step component written in Svelte!
 
 ![demo](static/demo.png)
 
