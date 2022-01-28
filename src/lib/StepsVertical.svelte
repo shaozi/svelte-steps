@@ -15,8 +15,8 @@
 		- `icon`: A svelte component displayed inside each steps.
 		- `iconProps`: An object that will be passed as props to the `icon` component.
 	- `current`: current step index. Number. Default `0`
-	- `size`: size of the step buttons. String. Default `"3rem"`
-	- `line`: thickness of the connecting lines between the step buttons. String. Default `"0.3rem"`
+	- `size`: size of the step buttons. String. Default `"2rem"`
+	- `line`: thickness of the connecting lines between the step buttons. String. Default `"0.15rem"`
 	- `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
 	- `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
 	- `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
@@ -31,25 +31,26 @@
 <script>
   // A bootstrap step component
   import { createEventDispatcher } from 'svelte'
-  import { tweened } from 'svelte/motion'
   import Check from './Check.svelte'
 
   export let steps
   export let current = 0
-  export let size = '3rem'
-  export let lineHeight = undefined
-  export let line = '0.3rem'
+  export let size = '2rem'
+  export let lineHeight = undefined // for backward compatibility
+  export let line = '0.15rem'
   export let primary = 'var(--bs-primary, #3a86ff)'
   export let secondary = 'var(--bs-secondary, #bbbbc0)'
   export let light = 'var(--bs-light, white)'
   export let dark = 'var(--bs-dark, black)'
   export let borderRadius = '50%'
   export let fontFamily = ''
+  export let reverse = false
 
   //
   if (lineHeight) {
     line = lineHeight
   }
+
   if (current > steps.length - 1) {
     current = steps.length - 1
   }
@@ -57,16 +58,11 @@
     current = 0
   }
 
-  $: progress = tweened(current, {
-    duration: 400,
-  })
-
   $: half = 100 / steps.length / 2
   const dispatch = createEventDispatcher()
   let onClick = (i) => {
     let last = current
     current = i
-    progress.set(i)
     dispatch('click', { current, last })
   }
 </script>
@@ -74,6 +70,7 @@
 <div
   class="steps-container"
   style={`--size: ${size}; 
+      --line-thickness: ${line};
 			--primary: ${primary}; 
 			--secondary: ${secondary};
 			--light: ${light};
@@ -83,73 +80,84 @@
         fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"
       };`}
 >
-  <div class="block">
-    <div class="background">
-      <!-- single line from start to end -->
-      <div class="d-flex align-items-center" style="width: 100%; height: 100%">
-        <div style="width: {half}%; height: 100%;" />
+  {#each steps as step, i}
+    <div
+      style="display: flex; align-items:center; min-height: 5rem;"
+      style:flex-direction={reverse ? 'row-reverse' : 'row'}
+    >
+      <div
+        style="display: flex; align-items: center; 
+        align-self: stretch; "
+      >
         <div
-          class="bg-secondary"
-          style="height: {line}; width: {100 - half * 2}%;"
+          style="min-width: var(--size); align-self: stretch; display: flex; 
+          flex-direction: column; align-items:center;
+          justify-content: center;"
         >
-          <div
-            class="progress-bar"
-            style="height: 100%; width: {($progress * 100) /
-              (steps.length - 1)}%"
-          />
+          {#if i > 0}
+            <div class="bar {i <= current ? `bg-primary` : `bg-secondary`}" />
+          {:else}
+            <div class="bar" />
+          {/if}
+          {#if i < steps.length - 1}
+            <div class="bar {i < current ? `bg-primary` : `bg-secondary`}" />
+          {:else}
+            <div class="bar" />
+          {/if}
         </div>
-        <div style="width: {half}%; height: 100%" />
       </div>
-    </div>
-
-    <div class="foreground">
-      <div class="d-flex justify-content-space-around">
-        {#each steps as step, i}
-          <div
-            class="step 
+      <div
+        style="display: flex; align-items: center; "
+        style:flex-direction={reverse ? 'row-reverse' : 'row'}
+        style:margin-left={reverse ? '0' : '-' + size}
+        style:margin-right={reverse ? '-' + size : '0'}
+      >
+        <div
+          class="step
 						  {i <= current ? `bg-primary text-light` : `bg-secondary text-light`}
 						  "
-            class:shadow={i == current}
-            on:click={() => {
-              onClick(i)
-            }}
-          >
-            {#if step.icon}
-              {#if i < current}
-                <Check />
-              {:else if step.iconProps}
-                <svelte:component this={step.icon} {...step.iconProps} />
-              {:else}
-                <svelte:component this={step.icon} />
-              {/if}
-            {:else if i < current}
+          class:shadow={i == current}
+          on:click={() => {
+            onClick(i)
+          }}
+        >
+          {#if step.icon}
+            {#if i < current}
               <Check />
+            {:else if step.iconProps}
+              <svelte:component this={step.icon} {...step.iconProps} />
             {:else}
-              <span class="steps__number">{i + 1}</span>
+              <svelte:component this={step.icon} />
             {/if}
-          </div>
-        {/each}
+          {:else if i < current}
+            <Check />
+          {:else}
+            <span class="steps__number">{i + 1}</span>
+          {/if}
+        </div>
+
+        <div
+          class="steps__label"
+          style:margin-left={reverse ? '' : '1rem'}
+          style:margin-right={reverse ? '1rem' : ''}
+          style:text-align={reverse ? 'right' : 'left'}
+        >
+          {#if typeof step.text != 'undefined'}
+            <div
+              class:text-primary={i <= current}
+              on:click={() => {
+                onClick(i)
+              }}
+            >
+              {step.text}
+            </div>
+          {:else}
+            <div />
+          {/if}
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="d-flex align-items-start">
-    {#each steps as step, i}
-      {#if typeof step.text != 'undefined'}
-        <div
-          class="d-flex justify-content-center"
-          style="width: {100 / steps.length}%;"
-        >
-          <div
-            class:text-primary={i <= current}
-            class="steps__label text-center"
-          >
-            {step.text}
-          </div>
-        </div>
-      {/if}
-    {/each}
-  </div>
+  {/each}
 </div>
 
 <style>
@@ -160,15 +168,11 @@
     display: flex;
     flex-flow: row nowrap;
   }
-  .block .background,
-  .block .foreground {
-    box-sizing: border-box;
-    width: 100%;
-    flex: none;
-  }
 
-  .block .foreground {
-    margin-left: -100%;
+  .bar {
+    flex-grow: 10;
+    width: var(--line-thickness);
+    max-width: var(--line-thickness);
   }
   .step {
     border-radius: var(--border-radius);
@@ -176,6 +180,7 @@
     align-items: center;
     justify-content: center;
     width: var(--size);
+    min-width: var(--size);
     height: var(--size);
     font-size: calc(var(--size) * 0.5);
   }
@@ -183,7 +188,10 @@
     cursor: pointer;
     filter: brightness(85%);
   }
-
+  .steps__label {
+    cursor: pointer;
+    font-size: larger;
+  }
   .d-flex {
     display: flex;
   }
@@ -218,7 +226,7 @@
   .shadow {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
-  .steps__label,
+
   .text-center {
     text-align: center;
   }

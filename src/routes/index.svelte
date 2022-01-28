@@ -1,5 +1,5 @@
 <script>
-  import Steps from '$lib/Steps.svelte'
+  import { Steps, StepsVertical } from '$lib'
   import Icon from '../demo-lib/icons/Icon.svelte'
   import { HighlightSvelte } from 'svelte-highlight'
   import atomOneDark from 'svelte-highlight/src/styles/atom-one-dark'
@@ -18,7 +18,9 @@
 
 <Steps {steps} />`,
       steps: [
-        { text: 'steppingstone one' },
+        {
+          text: 'stepping stone',
+        },
         { text: 'step two' },
         { text: 'the last step' },
       ],
@@ -54,7 +56,7 @@
         },
         { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
       ],
-      props: { borderRadius: 0 },
+      props: { borderRadius: '0' },
     },
     {
       title: 'Custom Color',
@@ -72,7 +74,7 @@
     },
     {
       title: 'Custom Size',
-      code: `<Steps {steps} size="2em" lineHeight="2px"/>`,
+      code: `<Steps {steps} size="2em" line="2px"/>`,
       steps: [
         { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
         {
@@ -82,7 +84,7 @@
         },
         { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
       ],
-      props: { size: '2em', lineHeight: '2px' },
+      props: { size: '2em', line: '2px' },
     },
     {
       title: 'No Text',
@@ -100,7 +102,7 @@
     },
     {
       title: 'Bar',
-      code: `<Steps {steps} size="2rem" lineHeight="2rem"/>`,
+      code: `<Steps {steps} size="2rem" line="2rem"/>`,
       steps: [
         { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
         {
@@ -110,7 +112,58 @@
         },
         { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
       ],
-      props: { size: '2rem', lineHeight: '2rem' },
+      props: { size: '2rem', line: '2rem' },
+    },
+  ]
+
+  let vertDemos = [
+    {
+      title: 'Vertical Steps',
+      code: `
+<script>
+  import { StepsVertical } from 'svelte-steps'
+  let steps = [
+        { text: 'step one' }, 
+        { text: 'step two' }, 
+        { text: 'the last step' }
+    ];
+<\/script>
+<VirticalSteps {steps}/>
+      `,
+      steps: [
+        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
+        {
+          text: 'step two',
+          icon: Icon,
+          iconProps: { name: 'paperclip', direction: 'n' },
+        },
+        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
+      ],
+      props: {},
+    },
+    {
+      title: 'Vertical Steps - Reversed',
+      code: `
+<script>
+  import { StepsVertical } from 'svelte-steps'
+  let steps = [
+        { text: 'step one' }, 
+        { text: 'step two' }, 
+        { text: 'the last step' }
+    ];
+<\/script>
+<VirticalSteps {steps} reverse/>
+      `,
+      steps: [
+        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
+        {
+          text: 'step two',
+          icon: Icon,
+          iconProps: { name: 'paperclip', direction: 'n' },
+        },
+        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
+      ],
+      props: { reverse: true },
     },
   ]
 
@@ -145,7 +198,7 @@
   {#each demos as demo}
     <div class="my-4">
       <h3>{demo.title}</h3>
-      <div class="row">
+      <div class="row d-flex align-items-center">
         <div class="col-md-6">
           <HighlightSvelte
             code={demo.code}
@@ -153,11 +206,33 @@
           />
         </div>
         <div class="col-md-6">
-          <Steps steps={demo.steps} {current} {...demo.props} />
+          <Steps steps={demo.steps} bind:current {...demo.props} />
         </div>
       </div>
     </div>
   {/each}
+
+  {#each vertDemos as vertDemo}
+    <div class="my-4">
+      <h3>{vertDemo.title}</h3>
+      <div class="row d-flex align-items-center">
+        <div class="col-md-6">
+          <HighlightSvelte
+            code={vertDemo.code}
+            style="padding: 1rem; border-radius: 0.5rem;"
+          />
+        </div>
+        <div class="col-md-6">
+          <StepsVertical
+            steps={vertDemo.steps}
+            bind:current
+            {...vertDemo.props}
+          />
+        </div>
+      </div>
+    </div>
+  {/each}
+
   <h3>Use with Bootstrap</h3>
   <p>
     It by default uses <code>--bs-primary</code>, <code>--bs-secondary</code>,
@@ -203,11 +278,12 @@
     </li>
     <li>
       <code>size</code>: size of the step buttons. String. Default
-      <code>"3rem"</code>
+      <code>"3rem"</code> (<code>"2rem"</code> for vertical steps)
     </li>
     <li>
-      <code>lineHeight</code>: height of the connecting lines between the step
-      buttons. String. Default <code>"0.3rem"</code>
+      <code>line</code>: thickness of the connecting lines between the step
+      buttons. String. Default <code>"0.3rem"</code> (<code>"0.15rem"</code> for
+      vertical steps)
     </li>
     <li>
       <code>primary</code>: Primary color of passed and current steps. String.
@@ -232,6 +308,10 @@
     <li>
       <code>fontFamily</code>: Font family of the component. String. Default
       <code>"'Helvetica Neue', Helvetica, Arial, sans-serif"</code>
+    </li>
+    <li>
+      <code>reverse</code>: for vertical steps only. Puts text labels to the
+      left. Default: <code>false</code>
     </li>
   </ul>
   <h3>Events</h3>
