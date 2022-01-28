@@ -29,6 +29,21 @@ Clone this project and run it. Itself is an example. Take a look at the homepage
 <Steps {steps} />
 ```
 
+### Vertical Steps
+
+```javascript
+<script>
+    import { StepsVertical } from 'svelte-steps';
+    let steps = [
+        { text: 'step one' }, 
+        { text: 'step two' }, 
+        { text: 'the last step' }
+    ];
+</script>
+
+<StepsVertical {steps} />
+```
+
 ### With Icons
 
 ```javascript
@@ -110,14 +125,15 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
     - `icon`: A svelte component displayed inside each steps.
     - `iconProps`: An object that will be passed as props to the `icon` component.
 - `current`: current step index. Number. Default `0`
-- `size`: size of the step buttons. String. Default `"3rem"`
-- `lineHeight`: height of the connecting lines between the step buttons. String. Default `"0.3rem"`
+- `size`: size of the step buttons. String. Default `"3rem"` (`"2rem"` for vertical steps)
+- `line`: thickness of the connecting lines between the step buttons. String. Default `"0.3rem"` (`"0.15rem"` for vertical steps)
 - `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
 - `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
 - `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
 - `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
 - `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
 - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
+- `reverse`: For vertical steps only. Puts text to the left. Default `false`
 
 ## Events
 
