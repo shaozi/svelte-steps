@@ -29,7 +29,9 @@ Clone this project and run it. Itself is an example. Take a look at the homepage
 <Steps {steps} />
 ```
 
-### Vertical Steps
+### Vertical Steps (NEW)
+
+> NOTE: needs svelte version 3.46.3 or newer
 
 ```javascript
 <script>
