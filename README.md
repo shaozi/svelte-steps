@@ -2,6 +2,17 @@
 
 A customizable step component written in Svelte!
 
+- [x] Bootstrap color theme
+- [x] Icons
+- [x] Horizontal and vertical
+- [x] Dumpbells and bar
+- [x] Custom size
+- [x] Custom color
+- [x] Custom font
+- [x] Circle, square and between
+- [x] Left and right
+
+
 ![demo](static/demo.png)
 
 ## Installation
@@ -12,7 +23,7 @@ npm install --saveDev svelte-steps
 
 ## Example Usages
 
-Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app)
+Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app). And the source file is at [src/routes/index.svelte](src/routes/index.svelte)
 
 ### Basic Usage
 
@@ -71,7 +82,7 @@ let steps = [
 ### Custom Size
 
 ```javascript
-<Steps {steps} size="2em" lineHeight="2px"/>
+<Steps {steps} size="2em" line="2px"/>
 ```
 
 ### No Text
@@ -87,7 +98,7 @@ let steps = [
 ### Bar
 
 ```javascript
-<Steps {steps} size="2rem" lineHeight="2rem"
+<Steps {steps} size="2rem" line="2rem"/>
 ```
 
 ### Events
@@ -139,6 +150,6 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 
 ## Events
 
-- `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
+- `on:click(e)`: click event. The clicked step index is `e.detail.current` and the last step index is `e.detail.last`
     
 
