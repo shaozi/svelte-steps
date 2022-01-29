@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/shaozi/svelte-steps/issues"
   },
-  "homepage": "https://github.com/shaozi/svelte-steps",
+  "homepage": "https://svelte-steps.web.app",
   "scripts": {
     "package": "svelte-kit package",
     "dev": "svelte-kit dev",
