@@ -145,7 +145,7 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 - `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
 - `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
 - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
-- `vertical`: Vertical steps
+- `vertical`: Vertical steps. Default `false`
 - `reverse`: For vertical steps only. Puts text to the left. Default `false`
 
 ## Events
