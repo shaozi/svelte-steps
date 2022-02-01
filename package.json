@@ -1,6 +1,6 @@
 {
   "name": "svelte-steps",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A customizable step component written in Svelte",
   "repository": {
     "type": "git",

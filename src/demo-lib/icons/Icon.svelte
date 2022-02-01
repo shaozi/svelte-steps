@@ -14,7 +14,7 @@
 
 <svg
 	class="c"
-	viewBox="0 0 25 25"
+	viewBox="0 0 16 16"
 	fill-rule="evenodd"
 	clip-rule="evenodd"
 	style={`transform: rotate(${rotation}deg)`}
