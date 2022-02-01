@@ -150,6 +150,8 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 
 ## Events
 
-- `on:click(e)`: click event. The clicked step index is `e.detail.current` and the last step index is `e.detail.last`
+- `on:click(e)`: click event. Event detail object has two keys:
+  - `e.detail.current`: the index of current step
+  - `e.detail.last`: the index of last step
     
 
