@@ -1,8 +1,28 @@
 <script>
-  import { Steps, StepsVertical } from '$lib'
+  import { Steps } from '$lib'
   import Icon from '../demo-lib/icons/Icon.svelte'
   import { HighlightSvelte } from 'svelte-highlight'
   import atomOneDark from 'svelte-highlight/src/styles/atom-one-dark'
+  let showCode = true
+  const stepsTextOnly = [
+    { text: 'Step one' },
+    { text: 'Step two' },
+    { text: 'Step three' },
+  ]
+  const stepsIconsOnly = [
+    { icon: Icon, iconProps: { name: 'money' } },
+    { icon: Icon, iconProps: { name: 'paperclip', direction: 'ne' } },
+    { icon: Icon, iconProps: { name: 'person' } },
+  ]
+  const stepsTextAndIcons = [
+    { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
+    {
+      text: 'step two',
+      icon: Icon,
+      iconProps: { name: 'paperclip', direction: 'ne' },
+    },
+    { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
+  ]
 
   let demos = [
     {
@@ -17,13 +37,7 @@
 <\/script>
 
 <Steps {steps} />`,
-      steps: [
-        {
-          text: 'stepping stone',
-        },
-        { text: 'step two' },
-        { text: 'the last step' },
-      ],
+      steps: stepsTextOnly,
       props: {},
     },
     {
@@ -33,57 +47,25 @@
     { text: 'step two', icon: IconPaperClip },
     { text: 'the last step', icon: IconPerson }
 ]`,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsTextAndIcons,
       props: {},
     },
     {
       title: 'Square Steps',
       code: `<Steps {steps} borderRadius="0"/>`,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsTextAndIcons,
       props: { borderRadius: '0' },
     },
     {
       title: 'Custom Color',
       code: `<Steps {steps} primary="#ff0000" secondary="#ffaaaa"/>`,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsTextAndIcons,
       props: { primary: '#ff0000', secondary: '#ffaaaa' },
     },
     {
       title: 'Custom Size',
       code: `<Steps {steps} size="2em" line="2px"/>`,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsTextAndIcons,
       props: { size: '2em', line: '2px' },
     },
     {
@@ -93,82 +75,37 @@
     { icon: IconPaperClip },
     { icon: IconPerson }
 ]`,
-      steps: [
-        { icon: Icon, iconProps: { name: 'money' } },
-        { icon: Icon, iconProps: { name: 'paperclip', direction: 'n' } },
-        { icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsIconsOnly,
       props: {},
     },
     {
       title: 'Bar',
       code: `<Steps {steps} size="2rem" line="2rem"/>`,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
+      steps: stepsTextAndIcons,
       props: { size: '2rem', line: '2rem' },
     },
-  ]
-
-  let vertDemos = [
     {
       title: 'Vertical Steps',
-      code: `
-<script>
-  import { StepsVertical } from 'svelte-steps'
-  let steps = [
-        { text: 'step one' }, 
-        { text: 'step two' }, 
-        { text: 'the last step' }
-    ];
-<\/script>
-<VirticalSteps {steps}/>
-      `,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
-      props: {},
+      code: `<Steps vertical {steps} />`,
+      steps: stepsTextAndIcons,
+      props: { vertical: true },
     },
     {
       title: 'Vertical Steps - Reversed',
-      code: `
-<script>
-  import { StepsVertical } from 'svelte-steps'
-  let steps = [
-        { text: 'step one' }, 
-        { text: 'step two' }, 
-        { text: 'the last step' }
-    ];
-<\/script>
-<VirticalSteps {steps} reverse/>
-      `,
-      steps: [
-        { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
-        {
-          text: 'step two',
-          icon: Icon,
-          iconProps: { name: 'paperclip', direction: 'n' },
-        },
-        { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
-      ],
-      props: { reverse: true },
+      code: `<Steps vertical reverse {steps} />`,
+      steps: stepsTextAndIcons,
+      props: { vertical: true, reverse: true },
     },
   ]
 
   let current = 1
-  let last = 0
+
+  let currentStep = 0
+  let lastStep = 0
+  const onClick = (e) => {
+    currentStep = e.detail.current
+    lastStep = e.detail.last
+  }
 </script>
 
 <svelte:head>
@@ -180,8 +117,14 @@
     class="d-flex align-items-center justify-content-between mt-5 border-bottom"
   >
     <h1 class="display-4">Svelte Steps</h1>
-    <div>
-      <a href="https://github.com/shaozi/svelte-steps.git">Github</a>
+    <div class="">
+      <a
+        href="https://github.com/shaozi/svelte-steps.git"
+        class="d-flex align-items-center ms-1"
+      >
+        <Icon name="github" />
+        <span class="ms-1">GitHub</span>
+      </a>
     </div>
   </nav>
 
@@ -190,68 +133,86 @@
   </div>
 
   <h2>Install</h2>
-  <HighlightSvelte
-    code={`npm install --save-dev svelte-steps`}
-    style="padding: 1rem; border-radius: 0.5rem;"
-  />
-  <h2>Usage</h2>
-  {#each demos as demo}
-    <div class="my-4">
-      <h3>{demo.title}</h3>
-      <div class="row d-flex align-items-center">
-        <div class="col-md-6">
-          <HighlightSvelte
-            code={demo.code}
-            style="padding: 1rem; border-radius: 0.5rem;"
-          />
+  <HighlightSvelte code={`npm install --save-dev svelte-steps`} />
+  <h2>
+    Usag<span
+      on:click={() => {
+        showCode = !showCode
+      }}>e</span
+    >
+  </h2>
+
+  <div class="row d-flex align-items-center my-4">
+    {#each demos as demo}
+      <div class="{showCode ? 'col-12' : 'col-md-6 text-end'} ms-auto">
+        <h4>{demo.title}</h4>
+      </div>
+      {#if showCode}
+        <div class="col-md-6 my-3">
+          <HighlightSvelte code={demo.code} />
         </div>
-        <div class="col-md-6">
-          <Steps steps={demo.steps} bind:current {...demo.props} />
-        </div>
+      {/if}
+      <div class="col-md-6 my-3">
+        <Steps
+          steps={demo.steps}
+          bind:current
+          on:click={(e) => {
+            console.log(e)
+          }}
+          {...demo.props}
+        />
+      </div>
+    {/each}
+
+    <div class="col-12 my-3">
+      <h4>Events</h4>
+    </div>
+    <div class="col-md-6 my-3">
+      <HighlightSvelte
+        code={`<script>
+  const onClick = (e) => {
+    current = e.detail.current
+    last = e.detail.last
+  }
+<\/script>
+<Steps on:click={onClick} {steps} />
+<div>Clicked: {current}</div>
+<div>Last: {last}</div>
+`}
+      />
+    </div>
+    <div class="col-md-6 my-3">
+      <Steps on:click={onClick} steps={stepsTextAndIcons} />
+      <div class="mt-2 alert alert-info">
+        <div class="text-center">Clicked: <code>{currentStep}</code></div>
+        <div class="text-center">Last: <code>{lastStep}</code></div>
       </div>
     </div>
-  {/each}
 
-  {#each vertDemos as vertDemo}
-    <div class="my-4">
-      <h3>{vertDemo.title}</h3>
-      <div class="row d-flex align-items-center">
-        <div class="col-md-6">
-          <HighlightSvelte
-            code={vertDemo.code}
-            style="padding: 1rem; border-radius: 0.5rem;"
-          />
-        </div>
-        <div class="col-md-6">
-          <StepsVertical
-            steps={vertDemo.steps}
-            bind:current
-            {...vertDemo.props}
-          />
-        </div>
-      </div>
+    <div class="col-12 my-3">
+      <h4>Use with Bootstrap</h4>
     </div>
-  {/each}
 
-  <h3>Use with Bootstrap</h3>
-  <p>
-    It by default uses <code>--bs-primary</code>, <code>--bs-secondary</code>,
-    <code>--bs-light</code>, and <code>--bs-dark</code> css variables if they are
-    defined. These css vars are defined in bootstrap css:
-  </p>
-  <HighlightSvelte
-    code={`<!-- Include Bootstrap css in app.html <head></head> -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous"
-    />`}
-    style="padding: 1rem; border-radius: 0.5rem;"
-  />
+    <div class="col-md-6 my-3">
+      It by default uses <code>--bs-primary</code>, <code>--bs-secondary</code>,
+      <code>--bs-light</code>, and <code>--bs-dark</code> css variables if they are
+      defined. These css vars are defined in bootstrap css:
+    </div>
+    <div class="col-md-6 my-3">
+      <HighlightSvelte
+        code={`<!-- Include Bootstrap css in app.html <head></head> -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous"
+/>`}
+      />
+    </div>
+  </div>
 
   <h2>Component Details</h2>
-  <h3>Props</h3>
+  <h4>Props</h4>
   <ul>
     <li>
       <code>steps</code>:
@@ -310,29 +271,44 @@
       <code>"'Helvetica Neue', Helvetica, Arial, sans-serif"</code>
     </li>
     <li>
+      <code>vertical</code>: Vertical steps. Default: <code>false</code>
+    </li>
+    <li>
       <code>reverse</code>: for vertical steps only. Puts text labels to the
       left. Default: <code>false</code>
     </li>
   </ul>
-  <h3>Events</h3>
+
+  <h4>Events</h4>
   <ul>
     <li>
-      <code>on:click(e)</code>: click event with arg as the clicked step index
-      as <code>e.detail.current</code> and last step index as
-      <code>e.detail.last</code>
+      <code>on:click(e)</code>: click event. Event detail object has two keys:
+      <ul>
+        <li>
+          <code>e.detail.current</code>: the index of current step
+        </li>
+        <li>
+          <code>e.detail.last</code>: the index of last step
+        </li>
+      </ul>
     </li>
   </ul>
 
   <footer
     class="d-flex justify-content-between align-items-center my-3 py-2 border-top"
   >
+    <div />
     <div class="text-secondary small">
-      Built with <a href="https://kit.svelte.dev">SvelteKit</a>
+      Built with
+      <span class="text-danger h5"><Icon name="svelte" /></span>
+      <a href="https://kit.svelte.dev">SvelteKit</a>
     </div>
-    <div><a href="https://github.com/shaozi/svelte-steps.git">Github</a></div>
     <div />
   </footer>
 </div>
 
 <style>
+  :global(.hljs) {
+    border-radius: 0.6rem;
+  }
 </style>

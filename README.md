@@ -44,17 +44,16 @@ Clone this project and run it. Itself is an example. Take a look at the homepage
 
 > NOTE: needs svelte version 3.46.3 or newer
 
-```javascript
-<script>
-    import { StepsVertical } from 'svelte-steps';
-    let steps = [
-        { text: 'step one' }, 
-        { text: 'step two' }, 
-        { text: 'the last step' }
-    ];
-</script>
+Add `vertical` props to `Steps` component.
 
-<StepsVertical {steps} />
+```javascript
+<Steps vertical {steps} />
+```
+
+You can also use `reverse` to put text label to the left.
+
+```javascript
+<Steps vertical reverse {steps}>
 ```
 
 ### With Icons
@@ -146,6 +145,7 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 - `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
 - `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
 - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
+- `vertical`: Vertical steps
 - `reverse`: For vertical steps only. Puts text to the left. Default `false`
 
 ## Events
