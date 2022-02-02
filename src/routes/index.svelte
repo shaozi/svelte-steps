@@ -4,6 +4,8 @@
   import { HighlightSvelte } from 'svelte-highlight'
   import atomOneDark from 'svelte-highlight/src/styles/atom-one-dark'
   let showCode = true
+  let vertical = false
+
   const stepsTextOnly = [
     { text: 'Step one' },
     { text: 'Step two' },
@@ -15,7 +17,11 @@
     { icon: Icon, iconProps: { name: 'person' } },
   ]
   const stepsTextAndIcons = [
-    { text: 'step one', icon: Icon, iconProps: { name: 'money' } },
+    {
+      text: 'step one',
+      icon: Icon,
+      iconProps: { name: 'money' },
+    },
     {
       text: 'step two',
       icon: Icon,
@@ -85,6 +91,12 @@
       props: { size: '2rem', line: '2rem' },
     },
     {
+      title: 'Steps - Reversed',
+      code: `<Steps reverse {steps} />`,
+      steps: stepsTextAndIcons,
+      props: { reverse: true },
+    },
+    {
       title: 'Vertical Steps',
       code: `<Steps vertical {steps} />`,
       steps: stepsTextAndIcons,
@@ -140,6 +152,11 @@
         showCode = !showCode
       }}>e</span
     >
+    <span
+      on:click={() => {
+        vertical = !vertical
+      }}>:</span
+    >
   </h2>
 
   <div class="row d-flex align-items-center my-4">
@@ -159,6 +176,7 @@
           on:click={(e) => {
             console.log(e)
           }}
+          {vertical}
           {...demo.props}
         />
       </div>
@@ -274,8 +292,9 @@
       <code>vertical</code>: Vertical steps. Default: <code>false</code>
     </li>
     <li>
-      <code>reverse</code>: for vertical steps only. Puts text labels to the
-      left. Default: <code>false</code>
+      <code>reverse</code>: For horizontal steps, reverse the step from right to
+      the left; for vertical steps, reverse puts text labels to the left.
+      Default: <code>false</code>
     </li>
   </ul>
 
