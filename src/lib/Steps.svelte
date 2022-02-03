@@ -26,9 +26,9 @@
     - `vertical`: Vertical steps
     - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
 
-	@events
+  @events
 
-	- `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
+  - `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
 -->
 <script>
   // A bootstrap step component
@@ -75,16 +75,16 @@
   class="steps-container"
   style={`--size: ${size}; 
       --line-thickness: ${line};
-			--primary: ${primary}; 
-			--secondary: ${secondary};
-			--light: ${light};
-			--dark: ${dark};
-			--border-radius: ${borderRadius};
-			--font-family: ${
+      --primary: ${primary}; 
+      --secondary: ${secondary};
+      --light: ${light};
+      --dark: ${dark};
+      --border-radius: ${borderRadius};
+      --font-family: ${
         fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"
-      };`}
-  style:display="flex"
-  style:justify-content="space-between"
+      };
+      display: flex;
+      justify-content: space-between;`}
   style:flex-direction={vertical ? 'column' : reverse ? 'row-reverse' : 'row'}
 >
   {#each steps as step, i}
@@ -157,8 +157,10 @@
         <!-- circle -->
         <div
           class="step
-						  {i <= current ? `bg-primary text-light` : `bg-secondary text-light`}
-						  "
+              {i <= current
+            ? `bg-primary text-light`
+            : `bg-secondary text-light`}
+              "
           class:shadow={i == current}
           on:click={() => {
             onClick(i)
