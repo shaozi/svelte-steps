@@ -1,35 +1,36 @@
 <!--
-    @component 
+  @component 
 
-    @name svelte-steps
+  ## svelte-steps
 
-    @description This is the steps component.
-
-    @props 
+  ## props 
     
-    - `steps`:
-      - Array of object. Length has to be more than 1
-      - Required
-      - Each item is a step object that can have:
-        - `text`: The text displayed below each steps.
-        - `icon`: A svelte component displayed inside each steps.
-        - `iconProps`: An object that will be passed as props to the `icon` component.
-    - `current`: current step index. Number. Default `0`
-    - `size`: size of the step buttons. String. Default `"3rem"`
-    - `line`: thickness of the connecting lines between the step buttons. String. Default `"0.3rem"`
-    - `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
-    - `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
-    - `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
-    - `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
-    - `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
-    - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
-    - `vertical`: Vertical steps
-    - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
+  - `steps`:
+    - Array of object. Length has to be more than 1
+    - Required
+    - Each item is a step object that can have:
+      - `text`: The text displayed below each steps.
+      - `icon`: A svelte component displayed inside each steps.
+      - `iconProps`: An object that will be passed as props to the `icon` component.
+  - `current`: current step index. Number. Default `0`
+  - `size`: size of the step buttons. String. Default `"3rem"`
+  - `line`: thickness of the connecting lines between the step buttons. String. Default `"0.3rem"`
+  - `primary`: Primary color of passed and current steps. String. Default `'var(--bs-primary, #3a86ff)'`
+  - `secondary`: Secondary color of future steps. String. Default `'var(--bs-secondary, #bbbbc0)'`
+  - `light`: Primary color of text color in passed anc current steps. String. Default `'var(--bs-light, white)'`
+  - `dark`: Secondary color of text color in future steps. String. Default `'var(--bs-dark, black)'`
+  - `borderRadius`: Border radius of the step buttons. String. Default `'50%'` (circle)
+  - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
+  - `vertical`: Vertical steps
+  - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
 
-  @events
+  ## events
 
-  - `on:click(e)`: click event with arg as the clicked step index as `e.detail.current` and last step index as `e.detail.last`
--->
+  - `on:click(e)`: click event. Event detail object has two keys:
+    - `e.detail.current`: the index of current step
+    - `e.detail.last`: the index of last step
+    
+  -->
 <script>
   // A bootstrap step component
   import { createEventDispatcher } from 'svelte'
@@ -150,8 +151,8 @@
             ? 'row-reverse'
             : 'row'
           : 'column'}
-        style:margin-left={vertical ? (reverse ? '0' : '-' + size) : null}
-        style:margin-right={vertical ? (reverse ? '-' + size : '0') : null}
+        style:margin-left={vertical ? (reverse ? null : '-' + size) : null}
+        style:margin-right={vertical ? (reverse ? '-' + size : null) : null}
         style:margin-top={vertical ? null : '-' + size}
       >
         <!-- circle -->
