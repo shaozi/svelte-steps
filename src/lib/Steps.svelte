@@ -127,7 +127,9 @@
     style="display: flex; align-items: center;"
     style:flex-direction={vertical ? 'column' : 'row'}
     style:width={vertical ? size : '100%'}
+    style:min-width={vertical ? size : null}
     style:height={vertical ? '100%' : size}
+    style:min-height={vertical ? null : size}
   >
     <div
       style:width={vertical ? line : `${segmentSizes[0].width / 2}px`}
