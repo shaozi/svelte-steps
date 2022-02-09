@@ -1,4 +1,4 @@
-# Svelte steps component that is compatible to bootstrap
+# 🐾 Svelte steps component 🐾
 
 A customizable step component written in Svelte!
 
@@ -24,7 +24,8 @@ npm install --saveDev svelte-steps
 
 ## Example Usages
 
-Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app). And the source file is at [src/routes/index.svelte](src/routes/index.svelte)
+Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app). 
+The source file of the demo is at [src/routes/index.svelte](src/routes/index.svelte)
 
 ### Basic Usage
 
@@ -82,7 +83,7 @@ let steps = [
 ### Custom Size
 
 ```javascript
-<Steps {steps} size="2em" line="2px"/>
+<Steps {steps} size="2rem" line="2px"/>
 ```
 
 ### No Text
