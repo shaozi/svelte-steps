@@ -76,7 +76,7 @@
     current = 0
   }
 
-  let progress = tweened(0, { duration: 400, easing: cubicOut })
+  let progress = tweened(undefined, { duration: 400, easing: cubicOut })
   let total = 0
   let key = vertical ? 'height' : 'width'
 
