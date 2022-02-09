@@ -97,6 +97,12 @@
       props: { reverse: true },
     },
     {
+      title: 'Steps - Not clickable',
+      code: `<Steps clickable={false} {steps}/>`,
+      steps: stepsTextAndIcons,
+      props: { clickable: false },
+    },
+    {
       title: 'Vertical Steps',
       code: `<Steps vertical {steps} />`,
       steps: stepsTextAndIcons,
@@ -295,6 +301,11 @@
       <code>reverse</code>: For horizontal steps, reverse the step from right to
       the left; for vertical steps, reverse puts text labels to the left.
       Default: <code>false</code>
+    </li>
+    <li>
+      <code>clickable</code>: When set to <code>false</code>, Clicking icons and
+      labels will not change step. You have to change <code>current</code> to
+      change step. Default <code>true</code>
     </li>
   </ul>
 

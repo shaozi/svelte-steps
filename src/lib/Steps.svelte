@@ -23,7 +23,8 @@
   - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
   - `vertical`: Vertical steps
   - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
-
+  - `clickable`: When set to `false`, Clicking icons and labels will not change step. You have to change `current` to change step. Default `true`
+ 
   ## events
 
   - `on:click(e)`: click event. Event detail object has two keys:
@@ -31,12 +32,15 @@
     - `e.detail.last`: the index of last step
     
   -->
-<script>
+<script lang="ts">
   // A bootstrap step component
+  import { tweened } from 'svelte/motion'
+  import { cubicOut } from 'svelte/easing'
+
   import { createEventDispatcher } from 'svelte'
   import Check from './Check.svelte'
 
-  export let steps
+  export let steps: any[]
   export let current = 0
   export let vertical = false
   export let size = vertical ? '2rem' : '3rem'
@@ -49,14 +53,22 @@
   export let borderRadius = '50%'
   export let fontFamily = ''
   export let reverse = false
+  export let clickable = true
 
   const minStepSize = '5rem'
   const stepLabelSpace = '1rem'
 
-  //
+  // for backward compatible when using lineHeight instead of line
   if (lineHeight) {
     line = lineHeight
   }
+
+  // each segment is half of the step size
+  let segmentSizes: { height: number; width: number }[] = []
+  for (let i = 0; i < steps.length; i++) {
+    segmentSizes.push({ height: 0, width: 0 })
+  }
+
   if (current > steps.length - 1) {
     current = steps.length - 1
   }
@@ -64,11 +76,33 @@
     current = 0
   }
 
+  let progress = tweened(0, { duration: 400, easing: cubicOut })
+  let total = 0
+  let key = vertical ? 'height' : 'width'
+
+  $: {
+    let p = 0
+    total = 0
+    // 0-> 0, 1 -> 0/2 + 1/2
+
+    for (let i = 0; i < steps.length; i++) {
+      if (i < current)
+        p += (segmentSizes[i][key] + segmentSizes[i + 1][key]) / 2
+      total += segmentSizes[i][key]
+    }
+
+    total -=
+      (segmentSizes[0][key] + segmentSizes[segmentSizes.length - 1][key]) / 2
+    $progress = p
+  }
+
   const dispatch = createEventDispatcher()
-  let onClick = (i) => {
-    let last = current
-    current = i
-    dispatch('click', { current, last })
+  let onClick = (i: number) => {
+    if (clickable) {
+      let last = current
+      current = i
+      dispatch('click', { current, last })
+    }
   }
 </script>
 
@@ -84,135 +118,140 @@
       --font-family: ${
         fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"
       };
-      display: flex;
-      justify-content: space-between;`}
-  style:flex-direction={vertical ? 'column' : reverse ? 'row-reverse' : 'row'}
+    display: flex; 
+    `}
+  style:flex-direction={vertical ? (reverse ? 'row-reverse' : 'row') : 'column'}
 >
-  {#each steps as step, i}
-    <!-- step container -->
+  <!-- progress line container -->
+  <div
+    style="display: flex; align-items: center;"
+    style:flex-direction={vertical ? 'column' : 'row'}
+    style:width={vertical ? size : '100%'}
+    style:height={vertical ? '100%' : size}
+  >
     <div
-      style="display: flex; align-items:center; flex-grow: 10; width: 100%"
+      style:width={vertical ? line : `${segmentSizes[0].width / 2}px`}
+      style:height={vertical ? `${segmentSizes[0].height / 2}px` : line}
+    />
+    <div
+      style:width={vertical ? line : `${total}px`}
+      style:height={vertical ? `${total}px` : line}
+      class="bg-secondary"
+      style="display: flex; align-items:center;"
       style:flex-direction={vertical
-        ? reverse
-          ? 'row-reverse'
-          : 'row'
-        : 'column'}
+        ? 'column'
+        : reverse
+        ? 'row-reverse'
+        : 'row'}
     >
-      <!-- line container -->
       <div
-        style="align-self: stretch; 
-          display: flex; 
-          align-items:center;
-          justify-content: center;"
-        style:flex-direction={vertical
-          ? 'column'
-          : reverse
-          ? 'row-reverse'
-          : 'row'}
-        style:min-width={vertical ? 'var(--size)' : minStepSize}
-        style:min-height={vertical ? minStepSize : 'var(--size)'}
-        style:width={vertical ? 'var(--size)' : null}
-        style:height={vertical ? null : 'var(--size)'}
-      >
-        <!-- first half line -->
-        {#if i > 0}
-          <div
-            class={i <= current ? `bg-primary` : `bg-secondary`}
-            style:flex-grow={10}
-            style:width={vertical ? 'var(--line-thickness)' : null}
-            style:min-width={vertical ? 'var(--line-thickness)' : null}
-            style:height={vertical ? null : 'var(--line-thickness)'}
-            style:min-height={vertical ? null : 'var(--line-thickness)'}
-          />
-        {:else}
-          <div style:flex-grow={10} />
-        {/if}
-        <!-- second half line -->
-        {#if i < steps.length - 1}
-          <div
-            class={i < current ? `bg-primary` : `bg-secondary`}
-            style:flex-grow={10}
-            style:width={vertical ? 'var(--line-thickness)' : null}
-            style:min-width={vertical ? 'var(--line-thickness)' : null}
-            style:height={vertical ? null : 'var(--line-thickness)'}
-            style:min-height={vertical ? null : 'var(--line-thickness)'}
-          />
-        {:else}
-          <div style:flex-grow={10} />
-        {/if}
-      </div>
-      <!-- line container end -->
-
-      <!-- circle and text label -->
+        class="bg-primary"
+        style:width={vertical ? line : `${$progress}px`}
+        style:height={vertical ? `${$progress}px` : line}
+      />
+      {#if line != size}
+        <!-- the progress indicator -->
+        <div
+          class="bg-primary"
+          style="width:8px; height:8px; border-radius: 50%;"
+        />
+      {/if}
+    </div>
+  </div>
+  <!--  progress line end -->
+  <div
+    style="display: flex; justify-content: space-between;"
+    style:flex-direction={vertical ? 'column' : reverse ? 'row-reverse' : 'row'}
+    style:margin-left={vertical ? (reverse ? null : '-' + size) : null}
+    style:margin-right={vertical ? (reverse ? '-' + size : null) : null}
+    style:margin-top={vertical ? null : '-' + size}
+  >
+    {#each steps as step, i}
+      <!-- step container -->
       <div
-        style="display: flex; align-items: center; "
+        style="display: flex; align-items:center; flex-grow: 10; width: 100%"
         style:flex-direction={vertical
           ? reverse
             ? 'row-reverse'
             : 'row'
           : 'column'}
-        style:margin-left={vertical ? (reverse ? null : '-' + size) : null}
-        style:margin-right={vertical ? (reverse ? '-' + size : null) : null}
-        style:margin-top={vertical ? null : '-' + size}
+        bind:clientWidth={segmentSizes[i].width}
+        bind:clientHeight={segmentSizes[i].height}
       >
-        <!-- circle -->
+        <!-- circle and text label -->
         <div
-          class="step
+          style="display: flex; align-items: center; "
+          style:flex-direction={vertical
+            ? reverse
+              ? 'row-reverse'
+              : 'row'
+            : 'column'}
+          style:min-width={vertical ? 'var(--size)' : minStepSize}
+          style:min-height={vertical ? minStepSize : 'var(--size)'}
+        >
+          <!-- circle -->
+          <div
+            class="step
               {i <= current
-            ? `bg-primary text-light`
-            : `bg-secondary text-light`}
+              ? `bg-primary text-light`
+              : `bg-secondary text-light`}
               "
-          class:shadow={i == current}
-          on:click={() => {
-            onClick(i)
-          }}
-        >
-          {#if step.icon}
-            {#if i < current}
+            class:shadow={i == current}
+            on:click={() => {
+              onClick(i)
+            }}
+          >
+            {#if step.icon}
+              {#if i < current}
+                <Check />
+              {:else if step.iconProps}
+                <svelte:component this={step.icon} {...step.iconProps} />
+              {:else}
+                <svelte:component this={step.icon} />
+              {/if}
+            {:else if i < current}
               <Check />
-            {:else if step.iconProps}
-              <svelte:component this={step.icon} {...step.iconProps} />
             {:else}
-              <svelte:component this={step.icon} />
+              <span class="steps__number">{i + 1}</span>
             {/if}
-          {:else if i < current}
-            <Check />
-          {:else}
-            <span class="steps__number">{i + 1}</span>
-          {/if}
-        </div>
-        <!-- text label -->
-        <div
-          class="steps__label"
-          style:margin-left={vertical
-            ? reverse
-              ? null
-              : stepLabelSpace
-            : null}
-          style:margin-right={vertical
-            ? reverse
-              ? stepLabelSpace
-              : null
-            : null}
-          style:margin-top={vertical ? null : stepLabelSpace}
-          style:text-align={vertical ? (reverse ? 'right' : 'left') : 'center'}
-        >
-          {#if typeof step.text != 'undefined'}
-            <div
-              class:text-primary={i <= current}
-              on:click={() => {
-                onClick(i)
-              }}
-            >
-              {step.text}
-            </div>
-          {:else}
-            <div />
-          {/if}
+          </div>
+          <!-- text label -->
+          <div
+            class="steps__label"
+            style:margin-left={vertical
+              ? reverse
+                ? null
+                : stepLabelSpace
+              : null}
+            style:margin-right={vertical
+              ? reverse
+                ? stepLabelSpace
+                : null
+              : null}
+            style:margin-top={vertical ? null : stepLabelSpace}
+            style:text-align={vertical
+              ? reverse
+                ? 'right'
+                : 'left'
+              : 'center'}
+          >
+            {#if typeof step.text != 'undefined'}
+              <div
+                class:text-primary={i <= current}
+                on:click={() => {
+                  onClick(i)
+                }}
+              >
+                {step.text}
+              </div>
+            {:else}
+              <div />
+            {/if}
+          </div>
         </div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  </div>
 </div>
 
 <style>

@@ -4,6 +4,7 @@ A customizable step component written in Svelte!
 
 - [x] Bootstrap color theme
 - [x] Icons
+- [x] Animate progress
 - [x] Horizontal and vertical
 - [x] Dumpbells and bar
 - [x] Custom size
@@ -147,6 +148,7 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 - `fontFamily`: Font family of the component. String. Default `"'Helvetica Neue', Helvetica, Arial, sans-serif"`
 - `vertical`: Vertical steps. Default `false`
 - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
+- `clickable`: When set to `false`, Clicking icons and labels will not change step. You have to change `current` to change step. Default `true`
 
 ## Events
 
