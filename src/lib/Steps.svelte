@@ -198,6 +198,7 @@
               ? `bg-primary text-light`
               : `bg-secondary text-light`}
               "
+            class:hover-highlight={clickable}
             class:shadow={i == current}
             on:click={() => {
               onClick(i)
@@ -220,6 +221,7 @@
           <!-- text label -->
           <div
             class="steps__label"
+            class:hover-highlight={clickable}
             style:margin-left={vertical
               ? reverse
                 ? null
@@ -272,16 +274,12 @@
     min-height: var(--size);
     font-size: calc(var(--size) * 0.5);
   }
-  .step:hover {
+  .hover-highlight:hover {
     cursor: pointer;
     filter: brightness(85%);
   }
   .steps__label {
     font-size: larger;
-  }
-  .steps__label:hover {
-    cursor: pointer;
-    filter: brightness(85%);
   }
 
   .text-primary {
