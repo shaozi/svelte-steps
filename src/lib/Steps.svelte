@@ -76,24 +76,38 @@
     current = 0
   }
 
-  let progress = tweened(undefined, { duration: 400, easing: cubicOut })
+  let progress = tweened(current, { duration: 400, easing: cubicOut })
   let total = 0
   let key = vertical ? 'height' : 'width'
 
-  $: {
-    let p = 0
-    total = 0
-    // 0-> 0, 1 -> 0/2 + 1/2
+  function f(p: number) {
+    // 0 - 1: $p * (0 + 1)/2
+    // 1 - 2: 1 * (0 + 1)/2 + ($p-1) * (1 + 2)/2
+    // 2 - 3: (0 + 1)/2 + (1 + 2)/2 + ($p-2) * (2+3)/2
+    let ret = 0
+    let i = 0
+    while (p > 1) {
+      p--
+      ret += (segmentSizes[i][key] + segmentSizes[i + 1][key]) / 2
+      i++
+    }
+    if (i < segmentSizes.length - 1) {
+      ret += (p * (segmentSizes[i][key] + segmentSizes[i + 1][key])) / 2
+    }
+    return ret
+  }
 
+  let fill = f(current)
+
+  $: {
+    total = 0
     for (let i = 0; i < steps.length; i++) {
-      if (i < current)
-        p += (segmentSizes[i][key] + segmentSizes[i + 1][key]) / 2
       total += segmentSizes[i][key]
     }
-
     total -=
       (segmentSizes[0][key] + segmentSizes[segmentSizes.length - 1][key]) / 2
-    $progress = p
+
+    fill = f($progress)
   }
 
   const dispatch = createEventDispatcher()
@@ -101,6 +115,7 @@
     if (clickable) {
       let last = current
       current = i
+      $progress = i
       dispatch('click', { current, last })
     }
   }
@@ -148,8 +163,8 @@
     >
       <div
         class="bg-primary"
-        style:width={vertical ? line : `${$progress}px`}
-        style:height={vertical ? `${$progress}px` : line}
+        style:width={vertical ? line : `${fill}px`}
+        style:height={vertical ? `${fill}px` : line}
       />
       {#if line != size}
         <!-- the progress indicator -->
@@ -194,7 +209,7 @@
           <!-- circle -->
           <div
             class="step
-              {i <= current
+              {i <= $progress
               ? `bg-primary text-light`
               : `bg-secondary text-light`}
               "
@@ -205,14 +220,14 @@
             }}
           >
             {#if step.icon}
-              {#if i < current}
+              {#if i < $progress}
                 <Check />
               {:else if step.iconProps}
                 <svelte:component this={step.icon} {...step.iconProps} />
               {:else}
                 <svelte:component this={step.icon} />
               {/if}
-            {:else if i < current}
+            {:else if i < $progress}
               <Check />
             {:else}
               <span class="steps__number">{i + 1}</span>
@@ -241,7 +256,7 @@
           >
             {#if typeof step.text != 'undefined'}
               <div
-                class:text-primary={i <= current}
+                class:text-primary={i <= $progress}
                 on:click={() => {
                   onClick(i)
                 }}
