@@ -76,7 +76,7 @@
     current = 0
   }
 
-  let progress = tweened(current, { duration: 400, easing: cubicOut })
+  let progress = tweened(current, { duration: 4000, easing: cubicOut })
   let total = 0
   let key = vertical ? 'height' : 'width'
 
@@ -110,12 +110,16 @@
     fill = f($progress)
   }
 
+  $: {
+    $progress = current
+  }
+
   const dispatch = createEventDispatcher()
   let onClick = (i: number) => {
     if (clickable) {
       let last = current
       current = i
-      $progress = i
+      // $progress = i
       dispatch('click', { current, last })
     }
   }
