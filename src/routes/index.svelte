@@ -201,23 +201,6 @@
       <div class="mt-2 alert alert-info">
         <div class="text-center">Clicked: <code>{currentStep}</code></div>
         <div class="text-center">Last: <code>{lastStep}</code></div>
-        <div class="d-flex justify-content-between">
-          <button
-            class="btn btn-outline-primary"
-            on:click={() => {
-              current = (current - 1) % stepsTextAndIcons.length
-            }}
-          >
-            &lt; Backward</button
-          >
-          <button
-            class="btn btn-outline-primary"
-            on:click={() => {
-              current = (current + 1) % stepsTextAndIcons.length
-            }}
-            >Forward &gt;
-          </button>
-        </div>
       </div>
     </div>
 
