@@ -157,8 +157,7 @@
       on:click={() => {
         showCode = !showCode
       }}>e</span
-    >
-    <span
+    ><span
       on:click={() => {
         vertical = !vertical
       }}>:</span
@@ -176,15 +175,7 @@
         </div>
       {/if}
       <div class="col-md-6 my-3">
-        <Steps
-          steps={demo.steps}
-          bind:current
-          on:click={(e) => {
-            console.log(e)
-          }}
-          {vertical}
-          {...demo.props}
-        />
+        <Steps steps={demo.steps} bind:current {vertical} {...demo.props} />
       </div>
     {/each}
 
@@ -206,7 +197,7 @@
       />
     </div>
     <div class="col-md-6 my-3">
-      <Steps on:click={onClick} steps={stepsTextAndIcons} />
+      <Steps bind:current on:click={onClick} steps={stepsTextAndIcons} />
       <div class="mt-2 alert alert-info">
         <div class="text-center">Clicked: <code>{currentStep}</code></div>
         <div class="text-center">Last: <code>{lastStep}</code></div>

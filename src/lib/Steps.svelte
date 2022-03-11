@@ -110,12 +110,16 @@
     fill = f($progress)
   }
 
+  $: {
+    $progress = current
+  }
+
   const dispatch = createEventDispatcher()
   let onClick = (i: number) => {
     if (clickable) {
       let last = current
       current = i
-      $progress = i
+      // $progress = i
       dispatch('click', { current, last })
     }
   }
