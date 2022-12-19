@@ -4,4 +4,4 @@ node_modules
 /package
 .svelte-kit/
 .firebase*
-firebase.json
+firebase*
