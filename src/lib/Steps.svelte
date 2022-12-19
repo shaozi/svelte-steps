@@ -353,9 +353,6 @@
   .text-light {
     color: var(--light) !important;
   }
-  .text-dark {
-    color: var(--dark) !important;
-  }
   .bg-secondary {
     background-color: var(--secondary) !important;
   }

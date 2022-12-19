@@ -44,7 +44,6 @@
       text: 'step one',
       icon: Icon,
       iconProps: { name: 'money' },
-      alert: true,
     },
     oldIcon,
     { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
