@@ -24,7 +24,10 @@
   - `vertical`: Vertical steps
   - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
   - `clickable`: When set to `false`, Clicking icons and labels will not change step. You have to change `current` to change step. Default `true`
- 
+  - `checkIcon`: User defined check icon for passed steps. If not specified, use the default check mark. Set to `null` if you don't want a check icon.
+  - `alertIcon`: User defined alert icon for passed steps that has truthful `alert` property. If not specified, use the default alert icon. Set to `null` if you don't want an alert icon.
+  - `alertColor`: User defined bg color for passed steps that has truthful `alert` property. Default 'var(--bs-danger, #dc3545)'
+
   ## events
 
   - `on:click(e)`: click event. Event detail object has two keys:
@@ -39,7 +42,7 @@
 
   import { createEventDispatcher } from 'svelte'
   import Check from './Check.svelte'
-
+  import Alert from './Alert.svelte'
   export let steps: any[]
   export let current = 0
   export let vertical = false
@@ -54,6 +57,10 @@
   export let fontFamily = ''
   export let reverse = false
   export let clickable = true
+
+  export let checkIcon: any = Check
+  export let alertIcon: any = Alert
+  export let alertColor = 'var(--bs-danger, #dc3545)'
 
   const minStepSize = '5rem'
   const stepLabelSpace = '1rem'
@@ -78,7 +85,7 @@
 
   let progress = tweened(current, { duration: 400, easing: cubicOut })
   let total = 0
-  let key = vertical ? 'height' : 'width'
+  let key: 'height' | 'width' = vertical ? 'height' : 'width'
 
   function f(p: number) {
     // 0 - 1: $p * (0 + 1)/2
@@ -101,19 +108,20 @@
 
   $: {
     total = 0
-    for (let i = 0; i < steps.length; i++) {
-      total += segmentSizes[i][key]
-    }
-    total -=
-      (segmentSizes[0][key] + segmentSizes[segmentSizes.length - 1][key]) / 2
+    if (segmentSizes[0][key] > 0) {
+      for (let i = 0; i < steps.length; i++) {
+        total += segmentSizes[i][key]
+      }
+      total -=
+        (segmentSizes[0][key] + segmentSizes[segmentSizes.length - 1][key]) / 2
 
+      console.log('fill')
+    }
     fill = f($progress)
   }
-
   $: {
     $progress = current
   }
-
   const dispatch = createEventDispatcher()
   let onClick = (i: number) => {
     if (clickable) {
@@ -133,6 +141,7 @@
       --secondary: ${secondary};
       --light: ${light};
       --dark: ${dark};
+      --danger: ${alertColor};
       --border-radius: ${borderRadius};
       --font-family: ${
         fontFamily || "'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -178,6 +187,10 @@
         />
       {/if}
     </div>
+    <div
+      style:width={vertical ? line : `${segmentSizes[0].width / 2}px`}
+      style:height={vertical ? `${segmentSizes[0].height / 2}px` : line}
+    />
   </div>
   <!--  progress line end -->
   <div
@@ -214,25 +227,53 @@
           <div
             class="step
               {i <= $progress
-              ? `bg-primary text-light`
-              : `bg-secondary text-light`}
+              ? step.alert
+                ? 'bg-danger'
+                : 'bg-primary'
+              : 'bg-secondary'} 
+              text-light
               "
             class:hover-highlight={clickable}
             class:shadow={i == current}
             on:click={() => {
               onClick(i)
             }}
+            on:keypress={() => {}}
           >
             {#if step.icon}
               {#if i < $progress}
-                <Check />
+                {#if step.alert}
+                  {#if alertIcon}
+                    <svelte:component this={alertIcon} />
+                  {:else if step.iconProps}
+                    <svelte:component this={step.icon} {...step.iconProps} />
+                  {:else}
+                    <svelte:component this={step.icon} />
+                  {/if}
+                {:else if checkIcon}
+                  <svelte:component this={checkIcon} />
+                {:else if step.iconProps}
+                  <svelte:component this={step.icon} {...step.iconProps} />
+                {:else}
+                  <svelte:component this={step.icon} />
+                {/if}
               {:else if step.iconProps}
                 <svelte:component this={step.icon} {...step.iconProps} />
               {:else}
                 <svelte:component this={step.icon} />
               {/if}
             {:else if i < $progress}
-              <Check />
+              {#if step.alert}
+                {#if alertIcon}
+                  <svelte:component this={alertIcon} />
+                {:else}
+                  <span class="steps__number">{i + 1}</span>
+                {/if}
+              {:else if checkIcon}
+                <svelte:component this={checkIcon} />
+              {:else}
+                <span class="steps__number">{i + 1}</span>
+              {/if}
             {:else}
               <span class="steps__number">{i + 1}</span>
             {/if}
@@ -264,6 +305,7 @@
                 on:click={() => {
                   onClick(i)
                 }}
+                on:keypress={() => {}}
               >
                 {step.text}
               </div>
@@ -280,10 +322,12 @@
 <style>
   .steps-container {
     font-family: var(--font-family);
+    box-sizing: border-box;
   }
 
   .step {
     border-radius: var(--border-radius);
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -296,9 +340,11 @@
   .hover-highlight:hover {
     cursor: pointer;
     filter: brightness(85%);
+    box-sizing: border-box;
   }
   .steps__label {
     font-size: larger;
+    box-sizing: border-box;
   }
 
   .text-primary {
@@ -315,6 +361,9 @@
   }
   .bg-primary {
     background-color: var(--primary) !important;
+  }
+  .bg-danger {
+    background-color: var(--danger) !important;
   }
   .shadow {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;

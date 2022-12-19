@@ -2,10 +2,33 @@
   import { Steps } from '$lib'
   import Icon from '../demo-lib/icons/Icon.svelte'
   import { HighlightSvelte } from 'svelte-highlight'
-  import atomOneDark from 'svelte-highlight/src/styles/atom-one-dark'
+  import atomOneDark from 'svelte-highlight/styles/atom-one-dark'
   let showCode = true
   let vertical = false
 
+  const oldIcon = {
+    text: 'step two',
+    icon: Icon,
+    iconProps: { name: 'paperclip', direction: 'ne' },
+  }
+  const newIcon = {
+    text: 'step two Updated',
+    icon: Icon,
+    iconProps: { name: 'github', direction: 'n', color: 'lightgreen' },
+  }
+  const oldIconNoText = {
+    icon: Icon,
+    iconProps: { name: 'paperclip', direction: 'ne' },
+  }
+  const newIconNoText = {
+    icon: Icon,
+    iconProps: { name: 'github', direction: 'n', color: 'lightgreen' },
+  }
+  const updateIcon2 = () => {
+    stepsTextAndIcons[1] = stepsTextAndIcons[1] == oldIcon ? newIcon : oldIcon
+    stepsIconsOnly[1] =
+      stepsIconsOnly[1] == oldIconNoText ? newIconNoText : oldIconNoText
+  }
   const stepsTextOnly = [
     { text: 'Step one' },
     { text: 'Step two' },
@@ -13,46 +36,42 @@
   ]
   const stepsIconsOnly = [
     { icon: Icon, iconProps: { name: 'money' } },
-    { icon: Icon, iconProps: { name: 'paperclip', direction: 'ne' } },
+    oldIconNoText,
     { icon: Icon, iconProps: { name: 'person' } },
   ]
-  const stepsTextAndIcons = [
+  let stepsTextAndIcons = [
     {
       text: 'step one',
       icon: Icon,
       iconProps: { name: 'money' },
+      alert: true,
     },
-    {
-      text: 'step two',
-      icon: Icon,
-      iconProps: { name: 'paperclip', direction: 'ne' },
-    },
+    oldIcon,
     { text: 'the last step', icon: Icon, iconProps: { name: 'person' } },
   ]
 
-  let demos = [
+  $: demos = [
     {
       title: 'Basic Usage',
       code: `<script>
-    import { Steps } from 'svelte-steps';
-    let steps = [
-        { text: 'step one' }, 
-        { text: 'step two' }, 
-        { text: 'the last step' }
-    ];
-<\/script>
-
-<Steps {steps} />`,
+        import { Steps } from 'svelte-steps';
+        let steps = [
+            { text: 'step one' },
+            { text: 'step two' },
+            { text: 'the last step' }
+        ];
+    <\/script>
+    <Steps {steps} />`,
       steps: stepsTextOnly,
       props: {},
     },
     {
       title: 'With Icons',
       code: `let steps = [
-    { text: 'step one', icon: IconMoney },
-    { text: 'step two', icon: IconPaperClip },
-    { text: 'the last step', icon: IconPerson }
-]`,
+        { text: 'step one', icon: IconMoney },
+        { text: 'step two', icon: IconPaperClip },
+        { text: 'the last step', icon: IconPerson }
+    ]`,
       steps: stepsTextAndIcons,
       props: {},
     },
@@ -77,10 +96,10 @@
     {
       title: 'No Text',
       code: `let steps = [
-    { icon: IconMoney },
-    { icon: IconPaperClip },
-    { icon: IconPerson }
-]`,
+        { icon: IconMoney },
+        { icon: IconPaperClip },
+        { icon: IconPerson }
+    ]`,
       steps: stepsIconsOnly,
       props: {},
     },
@@ -120,7 +139,9 @@
 
   let currentStep = 0
   let lastStep = 0
-  const onClick = (e) => {
+  const onClick = (
+    /** @type {{ detail: { current: number; last: number; }; }} */ e
+  ) => {
     currentStep = e.detail.current
     lastStep = e.detail.last
   }
@@ -156,11 +177,13 @@
     Usag<span
       on:click={() => {
         showCode = !showCode
-      }}>e</span
+      }}
+      on:keydown={() => {}}>e</span
     ><span
       on:click={() => {
         vertical = !vertical
-      }}>:</span
+      }}
+      on:keydown={() => {}}>:</span
     >
   </h2>
 
@@ -204,12 +227,20 @@
       </div>
     </div>
 
+    <div>
+      <h4>Change Step Icon Programmatically</h4>
+      <button class="btn btn-primary" on:click={updateIcon2}
+        >Change step 2 icon</button
+      >
+    </div>
+
     <div class="col-12 my-3">
       <h4>Use with Bootstrap</h4>
     </div>
 
     <div class="col-md-6 my-3">
       It by default uses <code>--bs-primary</code>, <code>--bs-secondary</code>,
+      <code>--bs-danger</code>
       <code>--bs-light</code>, and <code>--bs-dark</code> css variables if they are
       defined. These css vars are defined in bootstrap css:
     </div>
@@ -297,6 +328,21 @@
       <code>clickable</code>: When set to <code>false</code>, Clicking icons and
       labels will not change step. You have to change <code>current</code> to
       change step. Default <code>true</code>
+    </li>
+    <li>
+      <code>checkIcon</code>: User defined check icon for passed steps. If not
+      specified, use the default check mark. Set to <code>null</code> if you don't
+      want a check icon.
+    </li>
+    <li>
+      <code>alertIcon</code>: User defined alert icon for passed steps that has
+      truthful <code>alert</code> property. If not specified, use the default
+      alert icon. Set to <code>null</code> if you don't want an alert icon.
+    </li>
+    <li>
+      <code>alertColor</code>: User defined bg color for passed steps that has
+      truthful <code>alert</code> property. Default
+      <code>'var(--bs-danger, #dc3545)'</code>
     </li>
   </ul>
 
