@@ -13,7 +13,6 @@ A customizable step component written in Svelte!
 - [x] Circle, square and between
 - [x] Left and right
 
-
 ![demo](static/demo.png)
 
 ## Installation
@@ -24,7 +23,7 @@ npm install --saveDev svelte-steps
 
 ## Example Usages
 
-Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app). 
+Clone this project and run it. Itself is an example. Take a look at the homepage [here](https://svelte-steps.web.app).
 The source file of the demo is at [src/routes/index.svelte](src/routes/index.svelte)
 
 ### Basic Usage
@@ -33,8 +32,8 @@ The source file of the demo is at [src/routes/index.svelte](src/routes/index.sve
 <script>
     import { Steps } from 'svelte-steps';
     let steps = [
-        { text: 'step one' }, 
-        { text: 'step two' }, 
+        { text: 'step one' },
+        { text: 'step two' },
         { text: 'the last step' }
     ];
 </script>
@@ -42,7 +41,7 @@ The source file of the demo is at [src/routes/index.svelte](src/routes/index.sve
 <Steps {steps} />
 ```
 
-### Vertical Steps (NEW)
+### Vertical Steps
 
 > NOTE: needs svelte version 3.46.3 or newer
 
@@ -62,9 +61,9 @@ You can also use `reverse` to put text label to the left.
 
 ```javascript
 let steps = [
-    { text: 'step one', icon: IconMoney },
-    { text: 'step two', icon: IconPaperClip },
-    { text: 'the last step', icon: IconPerson }
+  { text: 'step one', icon: IconMoney },
+  { text: 'step two', icon: IconPaperClip },
+  { text: 'the last step', icon: IconPerson },
 ]
 ```
 
@@ -89,17 +88,27 @@ let steps = [
 ### No Text
 
 ```javascript
-let steps = [
-    { icon: IconMoney },
-    { icon: IconPaperClip },
-    { icon: IconPerson }
-]
+let steps = [{ icon: IconMoney }, { icon: IconPaperClip }, { icon: IconPerson }]
 ```
 
 ### Bar
 
 ```javascript
 <Steps {steps} size="2rem" line="2rem"/>
+```
+
+### Use alert and customize icons (**NEW**)
+
+````javascript
+import Escalation from './YourEscalation.svelt'
+<script>
+    let steps = [
+        { text: 'step one' , alert: true},
+        { text: 'step two' },
+        { text: 'the last step' }
+    ];
+</script>
+<Steps {steps} alertColor={'#ff00ff'} alertIcon={Escalation} checkIcon={null}>
 ```
 
 ### Events
@@ -113,19 +122,19 @@ let steps = [
         current = e.detail.current;
     }}
 />
-```
+````
 
 ## Use with Bootstrap
 
-It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dark` css variables if they are defined. These css vars are defined in bootstrap css:
+It by default uses `--bs-primary`, `--bs-secondary`, `--bs-danger`, `--bs-light`, and `--bs-dark` css variables if they are defined. These css vars are defined in bootstrap css:
 
 ```html
 <!-- Include Bootstrap css in app.html <head></head> -->
 <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-    crossorigin="anonymous"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
 />
 ```
 
@@ -150,11 +159,12 @@ It by default uses `--bs-primary`, `--bs-secondary`, `--bs-light`, and `--bs-dar
 - `vertical`: Vertical steps. Default `false`
 - `reverse`: For horizontal steps, reverse the step from right to the left; for vertical steps, reverse puts text labels to the left. Default `false`
 - `clickable`: When set to `false`, Clicking icons and labels will not change step. You have to change `current` to change step. Default `true`
+- `checkIcon`: User defined check icon for passed steps. If not specified, use the default check mark. Set to `null` if you don't want a check icon.
+- `alertIcon`: User defined alert icon for passed steps that has truthful `alert` property. If not specified, use the default alert icon. Set to `null` if you don't want an alert icon.
+- `alertColor`: User defined bg color for passed steps that has truthful `alert` property. Default 'var(--bs-danger, #dc3545)'
 
 ## Events
 
 - `on:click(e)`: click event. Event detail object has two keys:
   - `e.detail.current`: the index of current step
   - `e.detail.last`: the index of last step
-    
-
