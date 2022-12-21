@@ -114,8 +114,6 @@
       }
       total -=
         (segmentSizes[0][key] + segmentSizes[segmentSizes.length - 1][key]) / 2
-
-      console.log('fill')
     }
     fill = f($progress)
   }
