@@ -1,8 +1,9 @@
 <script>
   import { Steps } from '$lib'
   import Icon from '../demo-lib/icons/Icon.svelte'
-  import { HighlightSvelte } from 'svelte-highlight'
+  import { HighlightAuto } from 'svelte-highlight'
   import atomOneDark from 'svelte-highlight/styles/atom-one-dark'
+
   let showCode = true
   let vertical = false
 
@@ -171,7 +172,7 @@
   </div>
 
   <h2>Install</h2>
-  <HighlightSvelte code={`npm install --save-dev svelte-steps`} />
+  <HighlightAuto code={`npm install --save-dev svelte-steps`} />
   <h2>
     Usag<span
       on:click={() => {
@@ -193,7 +194,7 @@
       </div>
       {#if showCode}
         <div class="col-md-6 my-3">
-          <HighlightSvelte code={demo.code} />
+          <HighlightAuto code={demo.code} />
         </div>
       {/if}
       <div class="col-md-6 my-3">
@@ -205,7 +206,7 @@
       <h4>Events</h4>
     </div>
     <div class="col-md-6 my-3">
-      <HighlightSvelte
+      <HighlightAuto
         code={`<script>
   const onClick = (e) => {
     current = e.detail.current
@@ -244,7 +245,7 @@
       defined. These css vars are defined in bootstrap css:
     </div>
     <div class="col-md-6 my-3">
-      <HighlightSvelte
+      <HighlightAuto
         code={`<!-- Include Bootstrap css in app.html <head></head> -->
 <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -375,6 +376,6 @@
 
 <style>
   :global(.hljs) {
-    border-radius: 0.6rem;
+    border-radius: 0.4rem;
   }
 </style>

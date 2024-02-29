@@ -34,8 +34,8 @@
     - `e.detail.current`: the index of current step
     - `e.detail.last`: the index of last step
     
-  -->
-<script lang="ts">
+-->
+<script>
   // A bootstrap step component
   import { tweened } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
@@ -43,7 +43,7 @@
   import { createEventDispatcher } from 'svelte'
   import Check from './Check.svelte'
   import Alert from './Alert.svelte'
-  export let steps: any[]
+  export let steps
   export let current = 0
   export let vertical = false
   export let size = vertical ? '2rem' : '3rem'
@@ -58,8 +58,8 @@
   export let reverse = false
   export let clickable = true
 
-  export let checkIcon: any = Check
-  export let alertIcon: any = Alert
+  export let checkIcon = Check
+  export let alertIcon = Alert
   export let alertColor = 'var(--bs-danger, #dc3545)'
 
   const minStepSize = '5rem'
@@ -71,7 +71,9 @@
   }
 
   // each segment is half of the step size
-  let segmentSizes: { height: number; width: number }[] = []
+
+  // @type { height: number; width: number }[]
+  let segmentSizes = []
   for (let i = 0; i < steps.length; i++) {
     segmentSizes.push({ height: 0, width: 0 })
   }
@@ -85,9 +87,9 @@
 
   let progress = tweened(current, { duration: 400, easing: cubicOut })
   let total = 0
-  let key: 'height' | 'width' = vertical ? 'height' : 'width'
+  let key = vertical ? 'height' : 'width'
 
-  function f(p: number) {
+  function f(p /*@type number*/) {
     // 0 - 1: $p * (0 + 1)/2
     // 1 - 2: 1 * (0 + 1)/2 + ($p-1) * (1 + 2)/2
     // 2 - 3: (0 + 1)/2 + (1 + 2)/2 + ($p-2) * (2+3)/2
@@ -121,7 +123,7 @@
     $progress = current
   }
   const dispatch = createEventDispatcher()
-  let onClick = (i: number) => {
+  let onClick = (i /*: number*/) => {
     if (clickable) {
       let last = current
       current = i
@@ -222,7 +224,7 @@
           style:min-height={vertical ? minStepSize : 'var(--size)'}
         >
           <!-- circle -->
-          <div
+          <button
             class="step
               {i <= $progress
               ? step.alert
@@ -236,7 +238,6 @@
             on:click={() => {
               onClick(i)
             }}
-            on:keypress={() => {}}
           >
             {#if step.icon}
               {#if i < $progress}
@@ -275,42 +276,39 @@
             {:else}
               <span class="steps__number">{i + 1}</span>
             {/if}
-          </div>
+          </button>
           <!-- text label -->
-          <div
-            class="steps__label"
-            class:hover-highlight={clickable}
-            style:margin-left={vertical
-              ? reverse
-                ? null
-                : stepLabelSpace
-              : null}
-            style:margin-right={vertical
-              ? reverse
-                ? stepLabelSpace
-                : null
-              : null}
-            style:margin-top={vertical ? null : stepLabelSpace}
-            style:text-align={vertical
-              ? reverse
-                ? 'right'
-                : 'left'
-              : 'center'}
-          >
-            {#if typeof step.text != 'undefined'}
-              <div
-                class:text-primary={i <= $progress}
-                on:click={() => {
-                  onClick(i)
-                }}
-                on:keypress={() => {}}
-              >
+          {#if typeof step.text != 'undefined'}
+            <button
+              class="steps__label"
+              class:hover-highlight={clickable}
+              style:margin-left={vertical
+                ? reverse
+                  ? null
+                  : stepLabelSpace
+                : null}
+              style:margin-right={vertical
+                ? reverse
+                  ? stepLabelSpace
+                  : null
+                : null}
+              style:margin-top={vertical ? null : stepLabelSpace}
+              style:text-align={vertical
+                ? reverse
+                  ? 'right'
+                  : 'left'
+                : 'center'}
+              on:click={() => {
+                onClick(i)
+              }}
+            >
+              <div class:text-primary={i <= $progress}>
                 {step.text}
               </div>
-            {:else}
-              <div />
-            {/if}
-          </div>
+            </button>
+          {:else}
+            {''}
+          {/if}
         </div>
       </div>
     {/each}
@@ -324,6 +322,7 @@
   }
 
   .step {
+    border-width: 0;
     border-radius: var(--border-radius);
     box-sizing: border-box;
     display: flex;
@@ -341,6 +340,8 @@
     box-sizing: border-box;
   }
   .steps__label {
+    border-width: 0;
+    background-color: transparent;
     font-size: larger;
     box-sizing: border-box;
   }
