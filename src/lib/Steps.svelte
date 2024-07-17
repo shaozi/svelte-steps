@@ -61,6 +61,7 @@
   export let checkIcon = Check
   export let alertIcon = Alert
   export let alertColor = 'var(--bs-danger, #dc3545)'
+  export let htmlMode = false;
 
   const minStepSize = '5rem'
   const stepLabelSpace = '1rem'
@@ -303,7 +304,11 @@
               }}
             >
               <div class:text-primary={i <= $progress}>
-                {step.text}
+                {#if htmlMode}
+                  {@html step.text}
+                {:else}
+                  {step.text}
+                {/if}
               </div>
             </button>
           {:else}
